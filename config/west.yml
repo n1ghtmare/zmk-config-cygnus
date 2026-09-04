@@ -4,18 +4,17 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: carrefinho
-      url-base: https://github.com/carrefinho
+    - name: n1ghtmare
+      url-base: https://github.com/n1ghtmare
     # Additional modules containing boards/shields/custom code can be listed here as well
     # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
   projects:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
-    # Prospector dongle: display driver + status screen for the dongle build.
-    # `main` targets ZMK v0.3 / Zephyr 3.5, which is what we pin above.
+    # Customized Prospector dongle display module, targeting ZMK v0.3 / Zephyr 3.5.
     - name: prospector-zmk-module
-      remote: carrefinho
+      remote: n1ghtmare
       revision: main
   self:
     path: config
