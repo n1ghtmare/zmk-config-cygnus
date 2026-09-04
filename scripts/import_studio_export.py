@@ -10,8 +10,8 @@ Usage:
   python scripts/import_studio_export.py <input-file> [--target <path>]
 
 If --target is omitted, the script will try to place the file into
-`config/boards/shields/lily58/lily58.keymap` if that shield exists, else
-`config/lily58.keymap`.
+`config/boards/shields/cygnus/cygnus.keymap` if that shield exists, else
+`config/cygnus.keymap`.
 
 This is a minimal, safe tool — it will not attempt automated layout mapping.
 Use it to quickly import Studio's exported DTS or keymap files into the repo.
@@ -21,8 +21,8 @@ import json
 import os
 import sys
 
-DEFAULT_SHIELD_PATH = os.path.join("config", "boards", "shields", "lily58", "lily58.keymap")
-DEFAULT_ROOT_PATH = os.path.join("config", "lily58.keymap")
+DEFAULT_SHIELD_PATH = os.path.join("config", "boards", "shields", "cygnus", "cygnus.keymap")
+DEFAULT_ROOT_PATH = os.path.join("config", "cygnus.keymap")
 
 
 def choose_default_target():

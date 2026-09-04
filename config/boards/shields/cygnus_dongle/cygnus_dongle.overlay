@@ -1,0 +1,22 @@
+/*
+ * Dongle for the Cygnus (Cygnus). The dongle has no keys of its own, so it
+ * gets a mock kscan, but it must declare the same matrix transform and
+ * physical layout as the halves.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include "../cygnus/cygnus_layout.dtsi"
+
+/ {
+    chosen {
+        zmk,kscan = &mock_kscan;
+    };
+
+    mock_kscan: kscan_mock {
+        compatible = "zmk,kscan-mock";
+        columns = <0>;
+        rows = <0>;
+        events = <0>;
+    };
+};

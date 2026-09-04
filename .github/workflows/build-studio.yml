@@ -21,11 +21,11 @@ jobs:
         run: |
           west init -l .
           west update
-      - name: Build lily58_left with Studio
+      - name: Build cygnus_left with Studio
         run: |
-          west build -b nice_nano_v2 zephyr -- -DSHIELD=lily58_left -DCONFIG_ZMK_STUDIO=y
+          west build -b nice_nano_v2 zephyr -- -DSHIELD=cygnus_left -DCONFIG_ZMK_STUDIO=y
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: lily58_left_with_studio
+          name: cygnus_left_with_studio
           path: build/zephyr/zephyr.hex

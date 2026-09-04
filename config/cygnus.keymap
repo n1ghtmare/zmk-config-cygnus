@@ -1,0 +1,88 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Transcribed from the ZMK Studio state on the left half, 2026-09-04.
+ * Key order per layer (54 keys):
+ *   line 1: left row0 c0-c5, right row0 c0-c5
+ *   line 2: left row1,        right row1
+ *   line 3: left row2,        right row2
+ *   line 4: left row3 c0-c5, LEFT big thumb, RIGHT big thumb, right row3 c0-c5
+ *   line 5: left thumb outer, left thumb inner, right thumb inner, right thumb outer
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/ext_power.h>
+#include <dt-bindings/zmk/keys.h>
+
+/* ZMK defines no macros for HID usages 0xB8/0xB9 (Keypad { and }), which is
+ * what ZMK Studio shows as "Keypad Left/Right Bracket". See NOTE in chat. */
+#define KP_LEFT_BRACE  (ZMK_HID_USAGE(HID_USAGE_KEY, HID_USAGE_KEY_KEYPAD_LEFT_BRACE))
+#define KP_RIGHT_BRACE (ZMK_HID_USAGE(HID_USAGE_KEY, HID_USAGE_KEY_KEYPAD_RIGHT_BRACE))
+
+/ {
+    /* CUSTOM BEHAVIORS START HERE */
+    behaviors {
+        mtt: mod_tap_with_tap_preferred {
+            compatible = "zmk,behavior-hold-tap";
+            label = "MOD_TAP_TAP_PREFERRED";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+    };
+    /* CUSTOM BEHAVIORS END HERE */
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            // |  `  |  1  |  2  |  3  |  4  |  5  |            |  6  |  7  |  8  |  9  |  0  |  =  |
+            // | TAB |  Q  |  W  |  E  |  R  |  T  |            |  Y  |  U  |  I  |  O  |  P  |  -  |
+            // | ESC |  A  |  S  |  D  |  F  |  G  |            |  H  |  J  |  K  |  L  |  ;  |  '  |
+            // | SHFT| GUI/Z| ALT/X| CTL/C|  V  |  B  | RET  SPC |  N  |  M  |CTL/,|ALT/.|GUI//| SHFT|
+            //                              DEL  MO1     MO2  BSPC
+            bindings = <
+&kp GRAVE  &kp N1       &kp N2       &kp N3        &kp N4  &kp N5                    &kp N6  &kp N7  &kp N8            &kp N9             &kp N0            &kp EQUAL
+&kp TAB    &kp Q        &kp W        &kp E         &kp R   &kp T                     &kp Y   &kp U   &kp I             &kp O              &kp P             &kp MINUS
+&kp ESC    &kp A        &kp S        &kp D         &kp F   &kp G                     &kp H   &kp J   &kp K             &kp L              &kp SEMI          &kp SQT
+&kp LSHFT  &mtt LGUI Z  &mtt LALT X  &mtt LCTRL C  &kp V   &kp B   &kp RET  &kp SPACE  &kp N   &kp M   &mtt RCTRL COMMA  &mtt RALT DOT      &mtt RGUI FSLH    &kp RSHFT
+                                                   &kp DEL  &mo 1   &mo 2   &kp BSPC
+            >;
+        };
+
+        lower_layer {
+            // right hand only; left hand transparent
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                    &kp F6     &kp F7     &kp F8          &kp F9           &kp F10   &trans
+&trans  &trans  &trans  &trans  &trans  &trans                    &kp COMMA  &kp DOT    &kp LBRC        &kp RBRC         &kp ASTRK &trans
+&trans  &trans  &trans  &trans  &trans  &trans                    &kp LBRC   &kp RBRC   &kp LBRC        &kp RBRC         &trans    &kp PIPE
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans    &kp LBRC   &kp RBRC   &kp KP_LEFT_BRACE &kp KP_RIGHT_BRACE &kp BSLH  &trans
+                                        &trans  &trans  &mo 3   &trans
+            >;
+        };
+
+        raise_layer {
+            bindings = <
+&trans    &kp F1  &kp F2     &kp F3  &kp F4  &kp F5                    &trans     &trans     &trans     &trans      &trans    &trans
+&trans    &trans  &trans     &trans  &trans  &trans                    &kp N6     &kp N7     &kp N8     &kp N9      &kp N0    &trans
+&kp INS   &trans  &kp PSCRN  &trans  &trans  &kp CAPS                  &kp LEFT   &kp DOWN   &kp UP     &kp RIGHT   &trans    &trans
+&trans    &trans  &trans     &trans  &trans  &trans   &trans  &trans   &kp PLUS   &kp MINUS  &kp EQUAL  &kp LBRC    &kp RBRC  &kp BSLH
+                                             &trans   &mo 3   &trans  &trans
+            >;
+        };
+
+        bt_layer {
+            bindings = <
+&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_CLR_ALL              &trans  &trans      &trans      &trans  &trans  &trans
+&trans      &trans        &trans        &trans        &trans        &trans                      &trans  &trans      &trans      &trans  &trans  &trans
+&trans      &trans        &trans        &trans        &trans        &trans                      &trans  &kp PG_DN   &kp PG_UP   &trans  &trans  &trans
+&trans      &trans        &trans        &trans        &trans        &trans  &trans   &trans     &trans  &trans      &trans      &trans  &trans  &trans
+                                                                    &trans  &trans   &trans  &trans
+            >;
+        };
+    };
+};

@@ -20,29 +20,60 @@
 ---
 include:
   - board: nice_nano_v2
-    shield: lily58_left
+    shield: cygnus_left
   - board: nice_nano_v2
-    shield: lily58_right
+    shield: cygnus_right
+  # Erases the settings partition (bonds AND any keymap saved from ZMK Studio).
   - board: nice_nano_v2
     shield: settings_reset
-  # settings reset builds (studio-enabled)
-  # Studio-enabled builds for live keymap editing via ZMK Studio
+    artifact-name: cygnus_half_settings_reset
+
+  # Studio-enabled builds for live keymap editing via ZMK Studio.
+  # `_with_studio` talks to Studio over USB (needs the snippet);
+  # `_studio_ble` has no snippet, so Studio connects over Bluetooth instead.
   - board: nice_nano_v2
-    shield: lily58_left
+    shield: cygnus_left
     snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
-    artifact-name: lily58_left_with_studio
+    artifact-name: cygnus_left_with_studio
   - board: nice_nano_v2
-    shield: lily58_right
+    shield: cygnus_right
     snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
-    artifact-name: lily58_right_with_studio
+    artifact-name: cygnus_right_with_studio
   - board: nice_nano_v2
-    shield: lily58_left
+    shield: cygnus_left
     cmake-args: -DCONFIG_ZMK_STUDIO=y
-    artifact-name: lily58_left_settings_reset
+    artifact-name: cygnus_left_studio_ble
   - board: nice_nano_v2
-    shield: lily58_right
+    shield: cygnus_right
     cmake-args: -DCONFIG_ZMK_STUDIO=y
-    artifact-name: lily58_right_settings_reset
-# Note: settings_reset artifacts are built studio-enabled so you can flash them to reset Studio settings.
+    artifact-name: cygnus_right_studio_ble
+
+  # ---------------------------------------------------------------------
+  # DONGLE MODE (Prospector)
+  # The dongle becomes the central: it holds the keymap, talks to the host
+  # over USB/BT, and both halves become peripherals. Flash settings_reset to
+  # all three devices before switching modes.
+  # ---------------------------------------------------------------------
+  - board: seeeduino_xiao_ble
+    shield: cygnus_dongle prospector_adapter
+    artifact-name: cygnus_dongle
+  - board: seeeduino_xiao_ble
+    shield: cygnus_dongle prospector_adapter
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+    artifact-name: cygnus_dongle_with_studio
+  # Both halves as peripherals (the left one is no longer central).
+  - board: nice_nano_v2
+    shield: cygnus_left
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+    artifact-name: cygnus_left_peripheral
+  - board: nice_nano_v2
+    shield: cygnus_right
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+    artifact-name: cygnus_right_peripheral
+  # Settings reset for the dongle itself.
+  - board: seeeduino_xiao_ble
+    shield: settings_reset
+    artifact-name: cygnus_dongle_settings_reset

@@ -1,5 +1,10 @@
 /*
- * Copyright (c) 2020 Pete Johanson
+ * Shared matrix transform and physical layout for the Cygnus (Cygnus) keyboard.
+ *
+ * Included by every part of the keyboard: both halves and the dongle. ZMK
+ * requires all parts to declare the exact same matrix transform and physical
+ * layout, and ZMK Studio reads the physical layout from whichever part is
+ * central -- with a dongle, that is the dongle.
  *
  * SPDX-License-Identifier: MIT
  */
@@ -11,8 +16,6 @@
 
 / {
     chosen {
-        zephyr,display = &oled;
-        zmk,kscan = &kscan0;
         zmk,physical-layout = &my_custom_layout;
     };
 
@@ -48,55 +51,5 @@
             <&key_physical_attrs 100 100    0  350       0     0     0>, <&key_physical_attrs 100 100  100  337       0     0     0>, <&key_physical_attrs 100 100  200  312       0     0     0>, <&key_physical_attrs 100 100  300  300       0     0     0>, <&key_physical_attrs 100 100  400  312       0     0     0>, <&key_physical_attrs 100 100  500  325       0     0     0>, 
             <&key_physical_attrs 100 150  575  400    3000   625   475>, <&key_physical_attrs 100 150  975  400 (-3000)  1025   475>, <&key_physical_attrs 100 100 1050  325       0     0     0>, <&key_physical_attrs 100 100 1150  312       0     0     0>, <&key_physical_attrs 100 100 1250  300       0     0     0>, <&key_physical_attrs 100 100 1350  312       0     0     0>, 
             <&key_physical_attrs 100 100 1450  337       0     0     0>, <&key_physical_attrs 100 100 1550  350       0     0     0>, <&key_physical_attrs 100 100  350  415       0     0     0>, <&key_physical_attrs 100 100  450  425       0     0     0>, <&key_physical_attrs 100 100 1100  425       0     0     0>, <&key_physical_attrs 100 100 1200  415       0     0     0>;
-    };
-
-
-
-    kscan0: kscan {
-        compatible = "zmk,kscan-gpio-matrix";
-        wakeup-source;
-
-        diode-direction = "col2row";
-        row-gpios
-            = <&pro_micro 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&pro_micro 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&pro_micro 18 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&pro_micro 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&pro_micro 14 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            ;
-
-    };
-
-    left_encoder: encoder_left {
-        compatible = "alps,ec11";
-        a-gpios = <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        b-gpios = <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        steps = <80>;
-    };
-
-    sensors: sensors {
-        compatible = "zmk,keymap-sensors";
-        sensors = <&left_encoder>;
-        triggers-per-rotation = <20>;
-    };
-};
-
-&pro_micro_i2c {
-    status = "okay";
-
-    oled: ssd1306@3c {
-        compatible = "solomon,ssd1306fb";
-        reg = <0x3c>;
-        width = <128>;
-        height = <32>;
-        segment-offset = <0>;
-        page-offset = <0>;
-        display-offset = <0>;
-        multiplex-ratio = <31>;
-        segment-remap;
-        com-invdir;
-        com-sequential;
-        inversion-on;
-        prechargep = <0x22>;
     };
 };
